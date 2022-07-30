@@ -25,9 +25,9 @@ async fn main() -> std::io::Result<()> {
     // Bubble up the io::Error if we failed to bind the address
     // Otherwise call .await on our Server
     let configuration = Settings::new().expect("Fail to load config");
-    let connect_str = configuration.database.connection_string();
+    let connect_option = configuration.database.with_db();
     // let mut connection = PgPoolOptions:new().connect_timeout(std::time::Duration::from_secs(2)).connect_lazy(&connect_str.expose_secret()).expect("Fail to connect database");
-    let mut connection = PgPoolOptions::new().acquire_timeout(std::time::Duration::from_secs(2)) .connect_lazy(&connect_str.expose_secret()).expect("Fail to connect database");
+    let mut connection = PgPoolOptions::new().acquire_timeout(std::time::Duration::from_secs(2)) .connect_lazy_with(connect_option);
     let address = format!("{}:{}", &configuration.application.host, &configuration.application.port);
     let tcpListener = TcpListener::bind(&address).expect(&format!("fail to bind {}", &address));
     run(tcpListener, connection)?.await

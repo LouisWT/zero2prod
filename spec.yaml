@@ -1,4 +1,3 @@
-
 name: zero2prod
 # Check https://www.digitalocean.com/docs/app-platform/#regional-availability
 # for a list of all the available options.
@@ -9,19 +8,35 @@ name: zero2prod
 region: sgp
 services:
   - name: zero2prod
+    envs:
+      - key: APP_DATABASE__USERNAME
+        scope: RUN_TIME
+        value: ${newsletter.USERNAME}
+      - key: APP_DATABASE__PASSWORD
+        scope: RUN_TIME
+        value: ${newsletter.PASSWORD}
+      - key: APP_DATABASE__HOST
+        scope: RUN_TIME
+        value: ${newsletter.HOSTNAME}
+      - key: APP_DATABASE__PORT
+        scope: RUN_TIME
+        value: ${newsletter.PORT}
+      - key: APP_DATABASE__DATABASE_NAME
+        scope: RUN_TIME
+        value: ${newsletter.DATABASE}
     # Relative to the repository root
     dockerfile_path: Dockerfile
     source_dir: .
     github:
       # Depending on when you created the repository,
       # the default branch on GitHub might have been named `master`
-      branch: main
+      branch: master
       # Deploy a new version on every commit to `main`!
       # Continuous Deployment, here we come!
       deploy_on_push: true
       # !!! Fill in with your details
       # e.g. LukeMathWalker/zero-to-production
-      repo: <YOUR USERNAME>/<YOUR REPOSITORY NAME>
+      repo: web3Liuwentong/zero2prod
     # Active probe used by DigitalOcean's to ensure our application is healthy
     health_check:
       # The path to our health check endpoint!
@@ -36,4 +51,14 @@ services:
     instance_size_slug: basic-xxs
     # All incoming requests should be routed to our app
     routes:
-  - path: /
+      - path: /
+databases:
+  # PG = Postgres
+  - engine: PG
+    # Database name
+    name: newsletter
+    # Again, let's keep the bill lean
+    num_nodes: 1
+    size: db-s-dev-database
+    # Postgres version - using the latest here
+    version: "12"
