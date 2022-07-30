@@ -1,0 +1,47 @@
+[package]
+name = "zero2prod"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.1.0"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+serde = {version = "1.0.139", features=["derive"] }
+config = "0.13.1"
+chrono = "0.4.15"
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+tracing-bunyan-formatter = "0.3"
+tracing-log = "0.1"
+secrecy = { version = "0.8", features = ["serde"] }
+tracing-actix-web = "0.5"
+
+[dependencies.sqlx]
+version = "0.6.0"
+default-features = false
+features = [
+    "runtime-actix-rustls",
+    "macros",
+    "postgres",
+    "uuid",
+    "chrono",
+    "migrate",
+    "offline"
+]
+
+[dependencies.uuid]
+version = "1.1.2"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]
+
+[dev-dependencies]
+reqwest = "0.11"
+once_cell = "1"
