@@ -1,4 +1,4 @@
-use config::{Config, ConfigError, File};
+use config::{Config, ConfigError, File, Source};
 use secrecy::{ExposeSecret, Secret};
 use serde_aux::field_attributes::deserialize_number_from_string;
 use sqlx::ConnectOptions;
@@ -66,13 +66,13 @@ impl Settings {
             .unwrap_or_else(|_| "local".into())
             .try_into()
             .expect("Failed to parse APP_ENVIRONMENT.");
-
         let s = Config::builder()
             // Start off by merging in the "default" configuration file
             .add_source(config::File::from(configuration_directory.join("base")))
             .add_source(config::File::from(configuration_directory.join(environment.as_str())))
             // Add in settings from environment variables (with a prefix of APP and '__' as separator) // E.g. `APP_APPLICATION__PORT=5001 would set `Settings.application.port`
-            .add_source(config::Environment::with_prefix("app").separator("__"))
+            // prefix_separator 与 separator必须都指定
+            .add_source(config::Environment::with_prefix("APP").prefix_separator("_").separator("__"))
             .build()?;
 
         // You can deserialize (and thus freeze) the entire configuration as
