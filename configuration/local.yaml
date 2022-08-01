@@ -1,4 +1,8 @@
 application:
   host: 127.0.0.1
 database:
+#  host     : app-fd7cb9b7-ad14-4c05-b1b2-bd7e33819bf2-do-user-12132091-0.b.db.ondigitalocean.com
+#  port     : 25060
+#  username : doadmin
+#  password : AVNS_GiEsL_382TtBG10q_Q6
   require_ssl: false

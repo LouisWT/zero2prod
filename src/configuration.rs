@@ -5,20 +5,20 @@ use sqlx::ConnectOptions;
 use sqlx::postgres::PgConnectOptions;
 use sqlx::postgres::PgSslMode;
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 pub struct Settings {
     pub database: DatabaseSettings,
     pub application: ApplicationSettings,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 pub struct ApplicationSettings {
     pub host: String,
     #[serde(deserialize_with = "deserialize_number_from_string")]
     pub port: u16,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 pub struct DatabaseSettings {
     pub username: String,
     pub password: Secret<String>,
@@ -27,8 +27,10 @@ pub struct DatabaseSettings {
     pub host: String,
     pub database_name: String,
     pub require_ssl: bool,
+    pub ca_cert: String,
 }
 
+#[derive(Debug)]
 pub enum Environment {
     Local,
     Production,
@@ -84,7 +86,7 @@ impl DatabaseSettings {
             PgSslMode::Require
         } else {
         // Try an encrypted connection, fallback to unencrypted if it fails
-            PgSslMode::Prefer
+            PgSslMode::Disable
         };
 
         PgConnectOptions::new()

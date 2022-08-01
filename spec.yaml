@@ -24,6 +24,9 @@ services:
       - key: APP_DATABASE__DATABASE_NAME
         scope: RUN_TIME
         value: ${newsletter.DATABASE}
+      - key: APP_DATABASE__CA_CERT
+        scope: RUN_TIME
+        value: ${newsletter.CA_CERT}
     # Relative to the repository root
     dockerfile_path: Dockerfile
     source_dir: .
@@ -53,12 +56,13 @@ services:
     routes:
       - path: /
 databases:
+  - name: newsletter
   # PG = Postgres
-  - engine: PG
-    # Database name
-    name: newsletter
-    # Again, let's keep the bill lean
-    num_nodes: 1
-    size: db-s-dev-database
-    # Postgres version - using the latest here
-    version: "12"
+#  - engine: PG
+#    # Database name
+#    name: newsletter
+#    # Again, let's keep the bill lean
+#    num_nodes: 1
+#    size: db-s-dev-database
+#    # Postgres version - using the latest here
+#    version: "12"

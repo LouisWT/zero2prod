@@ -7,3 +7,4 @@ database:
   username: "postgres"
   password: "password"
   database_name: "newsletter"
+  ca_cert: ""
